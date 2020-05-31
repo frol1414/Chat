@@ -6,6 +6,22 @@
   >
     <v-flex xs12 sm8>
       <v-card min-width="400">
+
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="6000"
+          top
+        >
+          {{ message }}
+          <v-btn
+            dark
+            text
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </v-snackbar>
+
         <v-card-title>Chat</v-card-title>
         <v-card-text>
           <v-form
@@ -59,6 +75,8 @@
     },
     data: () => ({
       valid: true,
+      snackbar: false,
+      message: '',
       name: '',
       nameRules: [
         v => !!v || 'Name is required',
@@ -69,6 +87,17 @@
         v => !!v || 'Room is required',
       ],
     }),
+
+    mounted() {
+      const {message} = this.$route.query
+      if(message === "noUser") {
+        this.message = "Enter data";
+      } else if(message === "leftChat") {
+        this.message = "You leave the chat"
+      }
+
+      this.message = !!this.message
+    },
 
     methods: {
       ...mapMutations(["setUser"]),

@@ -14,7 +14,7 @@
           </v-list-item-content>
 
           <v-list-item-icon>
-            <v-icon :color="user.id === 2 ? 'primary' : 'grey'">chat_bubble</v-icon>
+            <v-icon :color="user.id === user.id ? 'primary' : 'grey'">chat_bubble</v-icon>
           </v-list-item-icon>
         </v-list-item>
       </v-list>
@@ -42,17 +42,16 @@
 export default {
   data: () => ({
     drawer: true,
-    users: [
-      {id: 1, name: 'user1'},
-      {id: 2, name: 'user2'}
-    ]
   }),
-  computed: mapState(["user"]),
+  computed: mapState(["user", "users"]),
   methods: {
     ...mapMutations(['clearData']),
       exit() {
+      this.$socket.emit('userLeft', this.user.id, () => {
         this.$router.push('/?message=leftChat');
         this.clearData()
+      })
+
       }
   }
 }
